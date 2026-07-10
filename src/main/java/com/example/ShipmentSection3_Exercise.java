@@ -1,10 +1,12 @@
+package com.example;
+
 import java.util.ArrayList;
 import java.util.List;
 
 // ╔══════════════════════════════════════════════════════════╗
 //  SECTION 3 — แบบฝึกหัด (Exercise)
-//  ชื่อนักศึกษา : ___________________________
-//  รหัสนักศึกษา : ___________________________
+//  ชื่อนักศึกษา : นายศุภกิตติ์ ฟันเฟือย
+//  รหัสนักศึกษา : 673380427-8
 // ╚══════════════════════════════════════════════════════════╝
 //
 //  โจทย์:
@@ -55,7 +57,7 @@ class Shipment {
     public double calculateCost() {
         final double STANDARD_RATE =  40.0;
         final double EXPRESS_RATE  = 100.0;
-        if (type == ShipmentType.EXPRESS) {          // ← ผิด ควรเช็ค STANDARD
+        if (type == ShipmentType.STANDARD) {          // ← ผิด ควรเช็ค STANDARD
             return weightKg * STANDARD_RATE;
         } else {
             return weightKg * EXPRESS_RATE;
@@ -68,7 +70,12 @@ class Shipment {
     //             แนะนำ: ใช้ String.format() และเรียก calculateCost()
     @Override
     public String toString() {
-        return "[" + trackingNumber + "] ???";  // ← เติมให้ครบ
+    	return String.format("[%s] %.2f กก. | %-8s | %9.2f บาท", 
+                trackingNumber, 
+                weightKg, 
+                type.name(), 
+                calculateCost());
+    
     }
 }
 
@@ -96,7 +103,7 @@ class ShippingCompany {
     public double getTotalCost() {
         double total = 0;
         for (int i = 0; i < shipments.size(); i++) {
-            total += shipments.get(0).calculateCost();  // ← ผิด ควรเป็น get(i)
+            total += shipments.get(i).calculateCost();  // ← ผิด ควรเป็น get(i)
         }
         return total;
     }
@@ -111,10 +118,16 @@ class ShippingCompany {
         System.out.printf ("  จำนวน Shipment : %d รายการ%n", shipments.size());
         System.out.println("========================================");
 
-        // 1) วนลูปแสดงแต่ละ shipment ตรงนี้
+        // 1) วนลูปแสดงแต่ละ shipment
+        for (Shipment s : shipments) {
+            System.out.println(s.toString());
+        }
 
         System.out.println("----------------------------------------");
-        // 2) แสดงยอดรวมตรงนี้
+        
+        // 2) แสดงยอดรวม
+        System.out.printf("ยอดรวมค่าขนส่งทั้งหมด : %.2f บาท%n", getTotalCost());
+        System.out.println("========================================");
     }
 }
 
@@ -126,7 +139,6 @@ public class ShipmentSection3_Exercise {
 
         ShippingCompany company = new ShippingCompany("RocketShip Thailand");
 
-        // (trackingNumber, weightKg, type)
         company.addShipment(new Shipment("RS001",  2.0,  ShipmentType.STANDARD));
         company.addShipment(new Shipment("RS002",  3.5,  ShipmentType.EXPRESS));
         company.addShipment(new Shipment("RS003",  7.0,  ShipmentType.STANDARD));
